@@ -10,6 +10,7 @@ const auth = getAuth();
 
 class FirebaseAuthController {
   registerUser(req, res) {
+    console.log(req);
     const { email, password } = req.body;
     if (!email || !password) {
       return res.status(422).json({
