@@ -67,6 +67,9 @@ class FirebaseAuthController {
       });
   }
   logoutUser(req, res) {
+    if (!req.cookies.access_token) {
+      return res.status(400).json({ error: "Access token is missing" });
+    }
     signOut(auth)
       .then(() => {
         res.clearCookie("access_token");
