@@ -4,12 +4,14 @@ const dateFormat = require("dateformat");
 const path = require("path");
 require("dotenv").config();
 
-const pathKey = path.resolve("../serviceaccountkey.json");
+// const pathKey = path.resolve("../serviceaccountkey.json");
 
-const gcs = new Storage({
-  projectId: process.env.GCP_PROJECT_ID,
-  keyFilename: pathKey,
-});
+// const gcs = new Storage({
+//   projectId: process.env.GCP_PROJECT_ID,
+//   keyFilename: pathKey,
+// });
+
+const gcs = new Storage();
 
 const bucketName = process.env.GCS_BUCKET_NAME;
 const bucket = gcs.bucket(bucketName);
