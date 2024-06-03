@@ -1,8 +1,9 @@
+require("dotenv").config();
+
 const express = require("express");
 const cookieParser = require("cookie-parser");
-require("dotenv").config();
-const PORT = process.env.PORT || 8080;
-const HOST = process.env.HOST || "localhost";
+const PORT = 8080;
+const HOST = "0.0.0.0";
 
 const app = express();
 const router = require("./routes");
