@@ -1,12 +1,22 @@
-// file: src/routes/index.js 
- 
-const express = require('express');
+// file: src/routes/index.js
+
+const express = require("express");
+const { upload } = require("../middleware/multer");
+
 const router = express.Router();
 
-const firebaseAuthController = require('../controllers/firebase-auth-controller');
+const firebaseAuthController = require("../controllers/firebase-auth-controller");
+const { postPredictHandler } = require("../controllers/prediction");
+const { getUsers, storeUser } = require("../controllers/user");
+const { uploadImage } = require("../controllers/image");
 
-router.post('/api/register', firebaseAuthController.registerUser);
-router.post('/api/login', firebaseAuthController.loginUser);
-router.post('/api/logout', firebaseAuthController.logoutUser);
+router.get("/api/users", getUsers);
+router.post("/api/users", storeUser);
+router.post("/api/upload-file", upload.single("image"), uploadImage);
+
+router.post("/api/register", firebaseAuthController.registerUser);
+router.post("/api/login", firebaseAuthController.loginUser);
+router.post("/api/logout", firebaseAuthController.logoutUser);
+router.post("/api/predict", postPredictHandler);
 
 module.exports = router;

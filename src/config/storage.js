@@ -16,9 +16,24 @@ const gcs = new Storage();
 const bucketName = process.env.GCS_BUCKET_NAME;
 const bucket = gcs.bucket(bucketName);
 
-// function getPublicUrl(filename) {
-//    return 'https://storage.googleapis.com/' + bucketName + '/' + filename;
-// }
+const uploadDiseaseImage = async (bucket, filename) => {
+  bucket.upload(`./${filename}`, {
+    destination: `/predictions/${filename}`,
+  });
+};
+
+const uploadPredictionImage = async (bucket, filename) => {};
+
+function getPublicUrl(filename, folder) {
+  return (
+    "https://storage.googleapis.com/" +
+    bucketName +
+    "/" +
+    folder +
+    "/" +
+    filename
+  );
+}
 
 // let ImgUpload = {}
 
@@ -48,4 +63,11 @@ const bucket = gcs.bucket(bucketName);
 //    stream.end(req.file.buffer)
 // }
 
-module.exports = { bucket, bucketName, gcs };
+module.exports = {
+  bucket,
+  bucketName,
+  gcs,
+  getPublicUrl,
+  uploadPredictionImage,
+  uploadDiseaseImage,
+};
