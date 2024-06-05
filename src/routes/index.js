@@ -1,7 +1,7 @@
 // file: src/routes/index.js
 
 const express = require("express");
-const { upload } = require("../middleware/multer");
+const { uploadMiddleware } = require("../middleware/multer");
 
 const router = express.Router();
 
@@ -12,7 +12,7 @@ const { uploadImage } = require("../controllers/image");
 
 router.get("/api/users", getUsers);
 router.post("/api/users", storeUser);
-router.post("/api/upload-file", upload.single("image"), uploadImage);
+router.post("/api/upload-file", uploadMiddleware, uploadImage);
 
 router.post("/api/register", firebaseAuthController.registerUser);
 router.post("/api/login", firebaseAuthController.loginUser);

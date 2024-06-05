@@ -1,4 +1,7 @@
 const { PrismaClient } = require("@prisma/client");
+const path = require("path");
+const uploadsPath = path.resolve(__dirname, "../../uploads");
+
 const predictClassification = require("../services/inference");
 const prisma = new PrismaClient();
 
@@ -15,7 +18,8 @@ const getPredictions = async (req, res) => {
 
 const postPredictHandler = async (req, res) => {
   try {
-    const { image } = req.payload; //atau req.body
+    // const { image } = path.join(uploadsPath, req.image.filename);
+    const { image } = req.file;
     const { model } = req.app.get("model");
     const { confidenceScore, label, suggestion } = await predictClassification(
       model,
