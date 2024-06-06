@@ -21,20 +21,22 @@ model User {
 }
 
 model Disease {
-  id          String       @id @default(cuid())
-  image       String
-  description String       @db.LongText
+  id          Int          @id @default(autoincrement())
+  name        String
+  latinName   String?
+  label       String
+  image       String?
+  description String?      @db.LongText
   prediction  Prediction[]
 }
 
 model Prediction {
-  id              String   @id @default(cuid())
-  image           String
+  id              String  @id @default(cuid())
+  image           String? @db.LongText
   confidenceScore Float
-  message         String?
-  label           String
-  User            User?    @relation(fields: [userId], references: [id])
+  suggestion      String? @db.LongText
+  User            User?   @relation(fields: [userId], references: [id])
   userId          String?
-  Disease         Disease? @relation(fields: [diseaseId], references: [id])
-  diseaseId       String?
+  Disease         Disease @relation(fields: [diseaseId], references: [id])
+  diseaseId       Int
 }

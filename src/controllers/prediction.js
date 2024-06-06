@@ -1,26 +1,47 @@
 const { PrismaClient } = require("@prisma/client");
-const path = require("path");
-const uploadsPath = path.resolve(__dirname, "../../uploads");
-
 const predictClassification = require("../services/inference");
+const { getPublicUrl, uploadImage, bucket } = require("../config/storage");
+
 const prisma = new PrismaClient();
 
-const getPredictions = async (req, res) => {
+const getPredictionsByUser = async (req, res) => {
   try {
-    const predictions = await prisma.predictions.findMany();
-    res.json(predictions);
+    const user = await prisma.user.findUnique({
+      where: {
+        id: req.params.userId,
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+    const predictions = await prisma.prediction.findMany({
+      where: {
+        userId: req.params.userId,
+      },
+    });
+    res.status(200).json({
+      success: true,
+      message: "Fetching all predictions was successfully",
+      data: predictions,
+    });
   } catch (error) {
     res
       .status(500)
-      .json({ status: "failed", message: "Error fetching predictions" });
+      .json({ success: false, message: "Error fetching predictions" });
   }
 };
 
 const postPredictHandler = async (req, res) => {
   try {
-    // const { image } = path.join(uploadsPath, req.image.filename);
-    const { image } = req.file;
-    const { model } = req.app.get("model");
+    const image = req.file.buffer;
+    const imageUrl = getPublicUrl(req.file.originalname, "predictions");
+
+    const model = req.app.get("model");
+
     const { confidenceScore, label, suggestion } = await predictClassification(
       model,
       image
@@ -31,24 +52,68 @@ const postPredictHandler = async (req, res) => {
       suggestion: suggestion,
       confidenceScore: confidenceScore,
     };
-    const data = await prisma.prediction.create(prediction);
+
+    const disease = await prisma.disease.findFirst({
+      where: {
+        label: prediction.label,
+      },
+    });
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id: req.params.userId,
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    const data = await prisma.prediction.create({
+      data: {
+        userId: req.params.userId,
+        diseaseId: disease.id,
+        suggestion: prediction.suggestion,
+        confidenceScore: prediction.confidenceScore,
+        image: "url",
+      },
+    });
+
+    // await uploadDiseaseImage(bucket, req.file.originalname, req.file.buffer);
+    await uploadImage({
+      bucket: bucket,
+      filename: req.file.originalname,
+      imageBuffer: req.file.buffer,
+      folder: "predictions",
+      contentType: req.file.contentType,
+    });
+
+    await prisma.prediction.update({
+      where: { id: data.id },
+      data: { image: imageUrl },
+    });
 
     const response = res.status(201).json({
-      status: "success",
+      success: true,
       message: "Model is predicted successfully",
-      data,
+      prediction: data,
+      disease: disease,
     });
     return response;
   } catch (error) {
     const response = res.status(413).json({
-      status: "failed",
+      success: false,
       message: "Model is failed to predicted",
+      error: error.message,
     });
     return response;
   }
 };
 
 module.exports = {
-  getPredictions,
+  getPredictionsByUser,
   postPredictHandler,
 };

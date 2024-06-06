@@ -6,7 +6,7 @@ const getUsers = async (req, res) => {
   try {
     const users = await prisma.user.findMany();
     res.status(200).json({
-      status: "success",
+      success: true,
       message: "Fetching all user was successfully",
       data: users,
     });
@@ -27,12 +27,12 @@ const storeUser = async (req, res) => {
       },
     });
     return res.status(200).json({
-      status: "success",
+      success: true,
       message: "Success to store user",
     });
   } catch (error) {
     return res.status(500).json({
-      status: "failed",
+      success: false,
       message: "Error to store users. Please check again the attributes",
     });
   }

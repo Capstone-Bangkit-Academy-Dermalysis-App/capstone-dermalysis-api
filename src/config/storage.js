@@ -1,6 +1,7 @@
 const { Storage } = require("@google-cloud/storage");
-const fs = require("fs");
-const dateFormat = require("dateformat");
+const { PassThrough } = require("stream");
+// const fs = require("fs");
+// const dateFormat = require("dateformat");
 const path = require("path");
 require("dotenv").config();
 
@@ -13,15 +14,43 @@ require("dotenv").config();
 
 const gcs = new Storage();
 
-const bucketName = process.env.GCS_BUCKET_NAME;
+const bucketName =
+  process.env.GCS_BUCKET_NAME || "bangkit-capstone-dermalysis-prod";
 const bucket = gcs.bucket(bucketName);
 
-const uploadDiseaseImage = async (bucket, filename) => {
-  bucket.upload(`./${filename}`, {
-    destination: `/predictions/${filename}`,
-  });
-};
+const uploadImage = async ({
+  bucket,
+  folder,
+  filename,
+  contentType,
+  imageBuffer,
+}) => {
+  try {
+    const bufferStream = new PassThrough();
+    bufferStream.end(imageBuffer);
 
+    const file = bucket.file(`/${folder}/${filename}`);
+    const writeStream = file.createWriteStream({
+      resumable: false, // Optional: Set to false untuk mengunggah langsung tanpa resume
+      metadata: {
+        contentType: contentType, // Sesuaikan dengan tipe file Anda
+      },
+    });
+
+    bufferStream.pipe(writeStream);
+
+    await new Promise((resolve, reject) => {
+      writeStream.on("finish", resolve);
+      writeStream.on("error", reject);
+    });
+    // const result = await bucket.upload(imageBuffer, {
+    //   destination: `/predictions/${filename}`,
+    console.log("File uploaded successfully");
+  } catch (error) {
+    console.error("Error uploading file:", error);
+    throw error; // Melemparkan error agar bisa ditangkap oleh pemanggil fungsi
+  }
+};
 const uploadPredictionImage = async (bucket, filename) => {};
 
 function getPublicUrl(filename, folder) {
@@ -69,5 +98,5 @@ module.exports = {
   gcs,
   getPublicUrl,
   uploadPredictionImage,
-  uploadDiseaseImage,
+  uploadImage,
 };
