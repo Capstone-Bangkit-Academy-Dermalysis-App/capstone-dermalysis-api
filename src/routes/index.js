@@ -23,14 +23,13 @@ router.use((req, res, next) => {
   const payload = JSON.stringify(req.body);
 
   // Your secret token
-  const secretToken = process.env.SECRET_TOKEN;
+  const secretToken = "KITAPASTIBISA";
 
   // Compute the expected signature based on the payload and secret token
   const expectedSignature = crypto
     .createHmac("sha256", secretToken)
     .update(payload)
     .digest("hex");
-  console.log(expectedSignature);
   // Compare the expected signature with the provided signature
   if (signature && signature === expectedSignature) {
     // Signature is valid, continue processing the request

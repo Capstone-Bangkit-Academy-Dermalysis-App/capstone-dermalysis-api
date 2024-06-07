@@ -16,9 +16,29 @@
 - `password` as `string`, must be at least 8 characters
 
 **Response:**
-- `201 OK`: Registration Succesfull! Verification email has been sent!
-- `422 Bad Request` : Invalid input or email already exists.
-- `500 Internal Server Error` : Error registering user.
+
+- `201 OK`
+```json
+{
+    success: true,
+    message: "Verification email sent! User created successfully!",
+    data: [userCredential]
+}
+```
+- `422 Bad Request`
+```json
+{
+    email: "Email is required",
+    password: "Password is required"
+}
+```
+- `500 Internal Server Error`
+```json
+{
+    success: false,
+    message: "Error sending email verification"
+}
+```
 
 ### Login
 
@@ -34,9 +54,28 @@
 - `password` as `string`, must be Correct
 
 **Response:**
-- `200 OK`: User logged in successfully!
-- `422 Bad Request` : Invalid input.
-- `500 Internal Server Error` : Error login user.
+- `200 OK`
+```json
+{
+    success: true,
+    message: "User logged in successfully",
+    data: [userCredential]
+}
+```
+- `422 Bad Request`
+```json
+{
+    success: false,
+    message: "Email and Password are required"
+}
+```
+- `500 Internal Server Error`
+```json
+{
+    success: false, 
+    message: errorMessage
+}
+```
 
 ### Logout
 
@@ -51,9 +90,27 @@
 - `access_token` as `string`, must be Filled
 
 **Response:**
-- `200 OK`: User logged out successfully!
-- `400 Bad Request` : Invalid input.
-- `500 Internal Server Error` : Error logout user.
+- `200 OK`
+```json
+{
+    success: true, 
+    message: "User logged out successfully"
+}
+```
+- `422 Bad Request`
+```json
+{
+    success: false, 
+    message: "Access token is missing"
+}
+```
+- `500 Internal Server Error`
+```json
+{
+    success: false, 
+    message: "Internal Server Error"
+}
+```
 
 ### Reset Password
 
@@ -68,6 +125,24 @@
 - `email` as `string`, must be Registed
 
 **Response:**
-- `200 OK`: Password Reset Email sent successfully!
-- `400 Bad Request` : Invalid input.
-- `500 Internal Server Error` : Error sending email.
+- `200 OK`
+```json
+{
+    success: true, 
+    message: "Password reset email sent successfully!"
+}
+```
+- `422 Bad Request`
+```json
+{
+    success: false,
+    message: "Email is required"
+}
+```
+- `500 Internal Server Error`
+```json
+{
+    success: false, 
+    message: "Internal Server Error"
+}
+```
