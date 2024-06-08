@@ -7,11 +7,13 @@ const getUsers = async (req, res) => {
     const users = await prisma.user.findMany();
     res.status(200).json({
       success: true,
-      message: "Fetching all user was successfully",
+      message: "Fetching all user from database was successfully",
       data: users,
     });
   } catch (error) {
-    res.status(500).json({ message: `Error fetching users: ${error} ` });
+    res
+      .status(500)
+      .json({ success: false, message: `Error fetching users: ${error} ` });
   }
 };
 
@@ -23,7 +25,7 @@ const storeUser = async (req, res) => {
       data: {
         id: user.id,
         name: user.name,
-        identifier: user.identifier,
+        identifier: user.email,
       },
     });
     return res.status(200).json({

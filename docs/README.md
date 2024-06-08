@@ -266,3 +266,72 @@
   "message": "Internal Server Error"
 }
 ```
+
+### Store a new user
+
+**Endpoint:** `/api/users`
+
+**Method:** `POST`
+
+**Description:** Store a new user using to database directly.
+
+**Request Body:**
+
+- `id` as `string`, This is userUid in firebase and should be unique
+- `name` as `string`, This is displayName in firebase
+- `email` as `string`, This is identifier aka email in firebase and should be unique
+
+**Response:**
+
+- `200 OK`
+
+```json
+{
+  "success": true,
+  "message": "Success to store user"
+}
+```
+
+- `500 Internal Server Error`
+
+```json
+{
+  "success": false,
+  "message": "Error to store users to database. Please check again the attributes"
+}
+```
+
+### Get all registered user from database
+
+**Endpoint:** `/api/users`
+
+**Method:** `GET`
+
+**Description:** Get All users from database (not from firebase).
+
+**Response:**
+
+- `200 OK`
+
+```json
+{
+  "success": true,
+  "message": "Fetching all user from database was successfully",
+  "data": [
+    {
+      "id": "z1VAikSrSDSvyZ2xSOlrnxlOqXO2",
+      "identifier": "example@mail.com",
+      "name": "Example name"
+    }
+  ]
+}
+```
+
+- `500 Internal Server Error`
+
+```json
+{
+  "success": false,
+  "message": "Error fetching users: (error message)"
+}
+```
