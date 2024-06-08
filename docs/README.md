@@ -1,5 +1,7 @@
 # capstone-dermalysis-api
 
+**Base url**: https://capstone-dermalysis-api-zwu3htolhq-et.a.run.app/
+
 ## User Authentication API
 
 ### Register a new user
