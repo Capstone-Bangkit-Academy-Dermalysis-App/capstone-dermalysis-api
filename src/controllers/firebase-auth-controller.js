@@ -6,42 +6,62 @@ const {
   sendEmailVerification,
   sendPasswordResetEmail,
 } = require("../config/firebase");
+const { PrismaClient } = require("@prisma/client");
+
+const prisma = new PrismaClient();
 
 const auth = getAuth();
 
 class FirebaseAuthController {
-  registerUser(req, res) {
-    console.log(req);
+  async registerUser(req, res) {
     const { email, password } = req.body;
-    if (!email || !password) {
-      return res.status(422).json({
-        email: "Email is required",
-        password: "Password is required",
-      });
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const userId = userCredential.user.uid;
+
+      // Store user in Prisma database
+      try {
+        await prisma.user.create({
+          data: {
+            id: userId,
+            identifier: userCredential.user.email,
+            name: "nama",
+          },
+        });
+      } catch (prismaError) {
+        console.error(prismaError);
+        return res.status(500).json({
+          success: false,
+          message: "Error storing user in database",
+        });
+      }
+
+      // Send email verification
+      try {
+        await sendEmailVerification(auth.currentUser);
+        return res.status(201).json({
+          success: true,
+          message: "Verification email sent! User created successfully!",
+          data: [userCredential],
+        });
+      } catch (verificationError) {
+        console.error(verificationError);
+        return res.status(500).json({
+          success: false,
+          message: "Error sending email verification",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      const errorMessage =
+        error.message || "An error occurred while registering user";
+      return res.status(500).json({ success: false, message: errorMessage });
     }
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        sendEmailVerification(auth.currentUser)
-          .then(() => {
-            res.status(201).json({
-              success: true,
-              message: "Verification email sent! User created successfully!",
-              data: [userCredential],
-            });
-          })
-          .catch((error) => {
-            console.error(error);
-            res.status(500).json({
-              success: false,
-              message: "Error sending email verification",
-            });
-          });
-      })
-      .catch((error) => {
-        const errorMessage =
-          error.message || "An error occurred while registering user";
-        res.status(500).json({ success: false, message: errorMessage });
-      });
   }
   loginUser(req, res) {
     const { email, password } = req.body;
@@ -106,13 +126,16 @@ class FirebaseAuthController {
     }
     sendPasswordResetEmail(auth, email)
       .then(() => {
-        res
-          .status(200)
-          .json({ success: true, message: "Password reset email sent successfully!" });
+        res.status(200).json({
+          success: true,
+          message: "Password reset email sent successfully!",
+        });
       })
       .catch((error) => {
         console.error(error);
-        res.status(500).json({ success: false, message: "Internal Server Error" });
+        res
+          .status(500)
+          .json({ success: false, message: "Internal Server Error" });
       });
   }
 }
