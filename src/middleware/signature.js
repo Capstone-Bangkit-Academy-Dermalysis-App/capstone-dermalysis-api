@@ -19,6 +19,8 @@ const signature = (req, res, next) => {
     .createHmac("sha256", secretToken)
     .update(payload)
     .digest("hex");
+
+  console.log(expectedSignature);
   // Compare the expected signature with the provided signature
   if (signature && signature === expectedSignature) {
     // Signature is valid, continue processing the request

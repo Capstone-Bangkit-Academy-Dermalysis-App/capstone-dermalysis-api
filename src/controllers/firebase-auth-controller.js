@@ -3,6 +3,7 @@ const {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  updateProfile,
   sendEmailVerification,
   sendPasswordResetEmail,
 } = require("../config/firebase");
@@ -14,8 +15,14 @@ const auth = getAuth();
 
 class FirebaseAuthController {
   async registerUser(req, res) {
-    const { email, password } = req.body;
+    const { email, password, name } = req.body;
 
+    if (!email || !password || !name) {
+      return res.status(422).json({
+        success: false,
+        message: "Email, password, and name are required.",
+      });
+    }
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -24,17 +31,28 @@ class FirebaseAuthController {
       );
       const userId = userCredential.user.uid;
 
+      // Update display name
+      try {
+        await updateProfile(userCredential.user, { displayName: name });
+      } catch (updateError) {
+        console.error("Error updating display name:", updateError);
+        return res.status(500).json({
+          success: false,
+          message: "Error updating display name",
+        });
+      }
+
       // Store user in Prisma database
       try {
         await prisma.user.create({
           data: {
             id: userId,
             identifier: userCredential.user.email,
-            name: "nama",
+            name: name, // Assuming you want to store the name as well
           },
         });
       } catch (prismaError) {
-        console.error(prismaError);
+        console.error("Error storing user in database:", prismaError);
         return res.status(500).json({
           success: false,
           message: "Error storing user in database",
@@ -43,21 +61,21 @@ class FirebaseAuthController {
 
       // Send email verification
       try {
-        await sendEmailVerification(auth.currentUser);
+        await sendEmailVerification(userCredential.user);
         return res.status(201).json({
           success: true,
           message: "Verification email sent! User created successfully!",
           data: [userCredential],
         });
       } catch (verificationError) {
-        console.error(verificationError);
+        console.error("Error sending email verification:", verificationError);
         return res.status(500).json({
           success: false,
           message: "Error sending email verification",
         });
       }
     } catch (error) {
-      console.error(error);
+      console.error("Error registering user:", error);
       const errorMessage =
         error.message || "An error occurred while registering user";
       return res.status(500).json({ success: false, message: errorMessage });

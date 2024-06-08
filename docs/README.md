@@ -14,10 +14,12 @@
 
 - `email` as `string`, must be unique
 - `password` as `string`, must be at least 8 characters
+- `name` as `string`, must be at least 3 characters
 
 **Response:**
 
 - `201 OK`
+
 ```json
 {
     success: true,
@@ -25,18 +27,40 @@
     data: [userCredential]
 }
 ```
+
 - `422 Bad Request`
+
 ```json
 {
-    email: "Email is required",
-    password: "Password is required"
+  "success": false,
+  "message": "Email, password, and name are required."
 }
 ```
+
 - `500 Internal Server Error`
+
 ```json
 {
-    success: false,
-    message: "Error sending email verification"
+  "success": false,
+  "message": "Error sending email verification"
+}
+```
+
+- `500 Internal Server Error`
+
+```json
+{
+  "success": false,
+  "message": "Error updating displayName"
+}
+```
+
+- `500 Internal Server Error`
+
+```json
+{
+  "success": false,
+  "message": "Error storing user in database"
 }
 ```
 
@@ -54,7 +78,9 @@
 - `password` as `string`, must be Correct
 
 **Response:**
+
 - `200 OK`
+
 ```json
 {
     success: true,
@@ -62,17 +88,21 @@
     data: [userCredential]
 }
 ```
+
 - `422 Bad Request`
+
+```json
+{
+  "success": false,
+  "message": "Email and Password are required"
+}
+```
+
+- `500 Internal Server Error`
+
 ```json
 {
     success: false,
-    message: "Email and Password are required"
-}
-```
-- `500 Internal Server Error`
-```json
-{
-    success: false, 
     message: errorMessage
 }
 ```
@@ -90,25 +120,31 @@
 - `access_token` as `string`, must be Filled
 
 **Response:**
+
 - `200 OK`
+
 ```json
 {
-    success: true, 
-    message: "User logged out successfully"
+  "success": true,
+  "message": "User logged out successfully"
 }
 ```
+
 - `422 Bad Request`
+
 ```json
 {
-    success: false, 
-    message: "Access token is missing"
+  "success": false,
+  "message": "Access token is missing"
 }
 ```
+
 - `500 Internal Server Error`
+
 ```json
 {
-    success: false, 
-    message: "Internal Server Error"
+  "success": false,
+  "message": "Internal Server Error"
 }
 ```
 
@@ -125,24 +161,30 @@
 - `email` as `string`, must be Registed
 
 **Response:**
+
 - `200 OK`
+
 ```json
 {
-    success: true, 
-    message: "Password reset email sent successfully!"
+  "success": true,
+  "message": "Password reset email sent successfully!"
 }
 ```
+
 - `422 Bad Request`
+
 ```json
 {
-    success: false,
-    message: "Email is required"
+  "success": false,
+  "message": "Email is required"
 }
 ```
+
 - `500 Internal Server Error`
+
 ```json
 {
-    success: false, 
-    message: "Internal Server Error"
+  "success": false,
+  "message": "Internal Server Error"
 }
 ```
