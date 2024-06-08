@@ -18,6 +18,7 @@ const {
   signInWithEmailAndPassword,
   signOut,
   sendEmailVerification,
+  sendPasswordResetEmail
 } = require("firebase/auth");
 
 const admin = require("firebase-admin");
@@ -33,5 +34,6 @@ module.exports = {
   createUserWithEmailAndPassword,
   signOut,
   sendEmailVerification,
+  sendPasswordResetEmail,
   admin,
 };
