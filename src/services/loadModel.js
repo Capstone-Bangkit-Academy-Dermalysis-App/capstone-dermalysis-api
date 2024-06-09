@@ -6,7 +6,8 @@ const path = require("path");
 
 // const loadModel = async () =>
 //   await tf.loadLayersModel("file://model/model.json");
-const loadModel = async () => await tf.loadLayersModel(process.env.MODEL_URL);
+const loadModel = async () =>
+  await tf.loadLayersModel("file://model/model.json");
 // const loadModel = async () => {
 //   const modelJson = fs.readFileSync(path.join(__dirname, modelPath), "utf8");
 //   const modelBuffer = Buffer.from(modelJson, "utf8");
