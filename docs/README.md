@@ -491,7 +491,7 @@
   "message": "Model is predicted successfuly",
   "data": {
     "id": "clx76kkff3ff003drpd5mtj4zft",
-    "userId": "jdUl23tylq7SISU4LyXjl7kTgFzm2",
+    "userId": null,
     "name": "Kutu Air",
     "label": "kutu-air",
     "latinName": "Athlete's foot",
