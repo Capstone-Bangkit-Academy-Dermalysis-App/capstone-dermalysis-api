@@ -29,7 +29,8 @@ const uploadImage = async ({
     const bufferStream = new PassThrough();
     bufferStream.end(imageBuffer);
 
-    const file = bucket.file(`/${folder}/${filename}`);
+    const file = bucket.file(`${folder}/${filename}`); // Hapus garis miring di depan
+
     const writeStream = file.createWriteStream({
       resumable: false, // Optional: Set to false untuk mengunggah langsung tanpa resume
       metadata: {
@@ -43,8 +44,7 @@ const uploadImage = async ({
       writeStream.on("finish", resolve);
       writeStream.on("error", reject);
     });
-    // const result = await bucket.upload(imageBuffer, {
-    //   destination: `/predictions/${filename}`,
+
     console.log("File uploaded successfully");
   } catch (error) {
     console.error("Error uploading file:", error);
