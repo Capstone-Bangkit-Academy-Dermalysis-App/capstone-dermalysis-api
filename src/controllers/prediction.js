@@ -1,4 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
+const { v4: uuidv4 } = require("uuid");
+const path = require("path");
 const predictClassification = require("../services/inference");
 const { getPublicUrl, uploadImage, bucket } = require("../config/storage");
 const {
@@ -52,7 +54,8 @@ const getPredictionsByUser = async (req, res) => {
 const postPredictHandler = async (req, res) => {
   try {
     const image = req.file.buffer;
-    const imageUrl = getPublicUrl(req.file.originalname, "predictions");
+    const imageName = uuidv4() + path.extname(req.file.originalname);
+    const imageUrl = getPublicUrl(imageName, "predictions");
 
     const model = req.app.get("model");
 
@@ -93,7 +96,7 @@ const postPredictHandler = async (req, res) => {
     // await uploadDiseaseImage(bucket, req.file.originalname, req.file.buffer);
     await uploadImage({
       bucket: bucket,
-      filename: req.file.originalname,
+      filename: imageName,
       imageBuffer: req.file.buffer,
       folder: "predictions",
       contentType: req.file.contentType,
