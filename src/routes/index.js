@@ -14,7 +14,7 @@ const { signature } = require("../middleware/signature");
 
 const router = express.Router();
 router.use(bodyParser.json());
-router.use(signature);
+// router.use(signature);
 
 // router.post("/api/upload-file", uploadMiddleware, uploadImage);
 router.post("/api/register", firebaseAuthController.registerUser);

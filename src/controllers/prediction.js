@@ -42,22 +42,15 @@ const postPredictHandler = async (req, res) => {
 
     const model = req.app.get("model");
 
-    const { confidenceScore, label, suggestion } = await predictClassification(
+    const { confidenceScore, disease } = await predictClassification(
       model,
       image
     );
 
     const prediction = {
-      label: label,
-      suggestion: suggestion,
+      label: disease.label,
       confidenceScore: confidenceScore,
     };
-
-    const disease = await prisma.disease.findFirst({
-      where: {
-        label: prediction.label,
-      },
-    });
 
     const user = await prisma.user.findUnique({
       where: {
@@ -76,9 +69,8 @@ const postPredictHandler = async (req, res) => {
       data: {
         userId: req.params.userId,
         diseaseId: disease.id,
-        suggestion: prediction.suggestion,
         confidenceScore: prediction.confidenceScore,
-        image: "url",
+        image: imageUrl,
       },
     });
 
@@ -89,11 +81,6 @@ const postPredictHandler = async (req, res) => {
       imageBuffer: req.file.buffer,
       folder: "predictions",
       contentType: req.file.contentType,
-    });
-
-    await prisma.prediction.update({
-      where: { id: data.id },
-      data: { image: imageUrl },
     });
 
     const response = res.status(201).json({
