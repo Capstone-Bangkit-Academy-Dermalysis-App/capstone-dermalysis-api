@@ -26,6 +26,7 @@ router.get("/api/users", getUsers);
 router.post("/api/users", storeUser);
 
 router.post("/api/predict/:userId", uploadMiddleware, postPredictHandler);
+router.post("/api/predict", uploadMiddleware, postPredictHandler);
 router.get("/api/predictions/:userId", getPredictionsByUser);
 
 router.get("/api/diseases", getDiseases);
