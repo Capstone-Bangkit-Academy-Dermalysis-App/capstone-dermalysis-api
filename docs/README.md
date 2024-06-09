@@ -364,7 +364,7 @@
 
 ## Machine Learning API
 
-### Predict the image by user
+### Predict the image with user
 
 **Endpoint:** `/api/predict/:userId`
 
@@ -372,7 +372,7 @@
 
 **Method:** `POST`
 
-**Description:** Predict the image using machine learning model to get skin disease
+**Description:** Predict the image using machine learning model to get skin disease and the history is SAVED to user.
 
 **Headers**
 
@@ -452,6 +452,95 @@
 {
   "success": false,
   "message": "User not found"
+}
+```
+
+- `413 Internal Server Error`
+
+```json
+{
+  "success": false,
+  "message": "Model is failed to predicted"
+}
+```
+
+### Predict the image without user
+
+**Endpoint:** `/api/predict`
+
+**Method:** `POST`
+
+**Description:** Predict the image using machine learning model to get skin disease and history is NOT SAVED to user
+
+**Headers**
+
+- `X-Dermalysis-Signature` : `(Secret hash)`
+- `Content-Type`: `multipart/form-data`
+
+**Request Body:**
+
+- `file` as `file` must be a valid image file, max size 1MB,
+
+**Response:**
+
+- `201 OK`
+
+```json
+{
+  "success": true,
+  "message": "Model is predicted successfuly",
+  "data": {
+    "id": "clx76kkff3ff003drpd5mtj4zft",
+    "userId": "jdUl23tylq7SISU4LyXjl7kTgFzm2",
+    "name": "Kutu Air",
+    "label": "kutu-air",
+    "latinName": "Athlete's foot",
+    "uploadedImage": "https://storage.googleapis.com/bangkit-capstone-dermalysis-prod/predictions/6321992e645eb.jpg",
+    "skinDiseaseImage": "https://storage.googleapis.com/bangkit-capstone-dermalysis-prod/assets/Kutu%20Air/6321992e645eb.jpg",
+    "confidenceScore": 99.62306618690491,
+    "description": "Kutu air atau kerap juga disebut athlete’s foot merupakan penyakit tinea pedis yang disebabkan dermatofita terutama Trichophyton rubrum, Trichophyton mentagrophytes dan Epidermophyton floccosum. Penyakit ini dapat menyebabkan ruam kemerahan yang bersisik dan gatal di kulit kaki. Penyakit ini dapat menular dan dapat dipengaruhi oleh faktor kaki yang sering basah atau lembab akibat berkeringat akibat memakai sepatu boots atau sepatu ketat.",
+    "cause": {
+      "section1": "Penyebab kutu air atau tinea pedis adalah berbagai jenis jamur. Namun, penyebab yang paling umum ditemui adalah jenis dermatophytes, yaitu jenis jamur yang juga menjadi penyebab kurap. Jenis jamur ini hidup di lingkungan yang bersuhu hangat dan lembap, seperti kamar mandi dan kolam renang. Penularan jamur ini dapat melalui sentuhan langsung dengan kulit yang terinfeksi atau benda yang terkontaminasi. Selanjutnya, jamur kutu air akan menetap dan berkembang biak pada permukaan kulit, dan dapat masuk ke dalam kulit dan menimbulkan infeksi, jika terdapat celah pada kulit. Berikut tiga jamur dermatofit yang paling umum menyebabkan kutu air:",
+      "section2": [
+        "Trichophyton (T.) rubrum.",
+        "T. interdigitale, sebelumnya disebut T. mentagrophytes var. Interdigital.",
+        "Epidermophyton floccosum."
+      ]
+    },
+    "symptom": {
+      "section1": "Beberapa gejala kutu air yang umum terjadi, antara lain: ",
+      "section2": [
+        "Iritasi seperti gatal, sensasi panas, terbakar, dan menyengat di antara jari-jari kaki.",
+        "Area kulit kaki yang terkena tampak berwarna kemerahan.",
+        "Bagian samping dan telapak kaki juga terasa sangat gatal.",
+        "Kuku kaki mengalami perubahan warna, menjadi lebih tebal, dan mudah rapuh.",
+        "Kuku kaki terluka bahkan tampak lepas tempatnya semula.",
+        "Kulit kaki terlihat pecah-pecah dan mengelupas, terutama di antara jari kaki dan pada telapak kaki.",
+        "Kulit melepuh dan lecet akibat gatal pada kaki.",
+        "Kulit tampak lebih kering pada area telapak atau sisi samping kaki.",
+        "Timbul cairan dari area kulit kaki yang ditumbuhi jamur."
+      ]
+    },
+    "treatment": [
+      {
+        "merk": ["Zoralin", "Mycoral", "Anfuhex"],
+        "tipe": "Bentuk sediaan: Salep/Krim",
+        "zatAktif": "Zat aktif: Ketokonazol"
+      },
+      {
+        "merk": ["Thecart", "Kalpanax", "Fungares"],
+        "tipe": "Bentuk sediaan: Salep/Krim",
+        "zatAktif": "Zat aktif: Miconazole"
+      },
+      {
+        "merk": ["Fungiderm", "Bernesten", "Hufaderm"],
+        "tipe": "Bentuk sediaan: Salep/Krim",
+        "zatAktif": "Zat aktif: Clotrimazole"
+      }
+    ],
+    "createdAt": "2024-06-09T06:46:03.713Z",
+    "updatedAt": "2024-06-09T06:46:03.713Z"
+  }
 }
 ```
 

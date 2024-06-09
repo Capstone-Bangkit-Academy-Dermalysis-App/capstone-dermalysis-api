@@ -66,22 +66,24 @@ const postPredictHandler = async (req, res) => {
       confidenceScore: confidenceScore,
     };
 
-    const user = await prisma.user.findUnique({
-      where: {
-        id: req.params.userId,
-      },
-    });
-
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found",
+    if (req.params.userId) {
+      const user = await prisma.user.findUnique({
+        where: {
+          id: req.params.userId,
+        },
       });
+
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: "User not found",
+        });
+      }
     }
 
     const prediction = await prisma.prediction.create({
       data: {
-        userId: req.params.userId,
+        userId: req?.params?.userId,
         diseaseId: disease.id,
         confidenceScore: makePrediction.confidenceScore,
         image: imageUrl,
