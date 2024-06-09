@@ -1,6 +1,9 @@
 const { PrismaClient } = require("@prisma/client");
 const predictClassification = require("../services/inference");
 const { getPublicUrl, uploadImage, bucket } = require("../config/storage");
+const {
+  getArrayJsonPrediction,
+} = require("../services/buildPredictionResponse");
 
 const prisma = new PrismaClient();
 
@@ -23,10 +26,21 @@ const getPredictionsByUser = async (req, res) => {
         userId: req.params.userId,
       },
     });
+
+    const data = await Promise.all(
+      predictions.map(async (prediction) => {
+        const disease = await prisma.disease.findUnique({
+          where: {
+            id: prediction.diseaseId,
+          },
+        });
+        return getArrayJsonPrediction({ prediction, disease });
+      })
+    );
     res.status(200).json({
       success: true,
       message: "Fetching all predictions was successfully",
-      data: predictions,
+      data: data,
     });
   } catch (error) {
     res
@@ -47,7 +61,7 @@ const postPredictHandler = async (req, res) => {
       image
     );
 
-    const prediction = {
+    const makePrediction = {
       label: disease.label,
       confidenceScore: confidenceScore,
     };
@@ -65,11 +79,11 @@ const postPredictHandler = async (req, res) => {
       });
     }
 
-    const data = await prisma.prediction.create({
+    const prediction = await prisma.prediction.create({
       data: {
         userId: req.params.userId,
         diseaseId: disease.id,
-        confidenceScore: prediction.confidenceScore,
+        confidenceScore: makePrediction.confidenceScore,
         image: imageUrl,
       },
     });
@@ -86,8 +100,9 @@ const postPredictHandler = async (req, res) => {
     const response = res.status(201).json({
       success: true,
       message: "Model is predicted successfully",
-      prediction: data,
-      disease: disease,
+      // prediction: data,
+      // disease: disease,
+      data: getArrayJsonPrediction({ prediction, disease }),
     });
     return response;
   } catch (error) {
