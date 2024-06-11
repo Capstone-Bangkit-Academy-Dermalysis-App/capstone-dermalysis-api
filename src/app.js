@@ -13,7 +13,8 @@ const startServer = async () => {
   console.log("ini");
 
   try {
-    await loadModel(app);
+    const model = await loadModel();
+    app.set("model", model);
   } catch (error) {
     console.error("Error loading model:", error);
     // Anda dapat menentukan tindakan apa yang ingin Anda lakukan jika terjadi kesalahan saat memuat model,

@@ -16,18 +16,11 @@ const path = require("path");
 //   const handler = tf.io.fileSystem(path.join(__dirname, modelPath));
 //   return await tf.loadLayersModel(handler);
 // };
-const loadModel = async (app) => {
-  try {
-    console.log("Starting to load model...");
-    console.time("Model Load Time");
-    const model = await tf.loadLayersModel("file://model/model.json");
-
-    console.timeEnd("Model Load Time");
-
-    app.set("model", model);
-    console.log("Model loaded successfully");
-  } catch (error) {
-    console.error("Failed to load model:", error);
-  }
+const loadModel = async () => {
+  console.log("Starting to load model...");
+  console.time("Model Load Time");
+  await tf.loadLayersModel("file://model/model.json");
+  console.timeEnd("Model Load Time");
+  console.log("Model loaded successfully");
 };
 module.exports = loadModel;
