@@ -377,6 +377,7 @@
 **Headers**
 
 - `X-Dermalysis-Signature` : `(Secret hash)`
+- `Cookie` : `access_token=theaccesstokenprovidedafteruserloggedin`
 - `Content-Type`: `multipart/form-data`
 
 **Request Body:**
@@ -443,6 +444,24 @@
     "createdAt": "2024-06-09T06:46:03.713Z",
     "updatedAt": "2024-06-09T06:46:03.713Z"
   }
+}
+```
+
+- `403 Forbidden`
+
+```json
+{
+  "success": false,
+  "message": "Error, No token provided"
+}
+```
+
+- `403 Forbidden`
+
+```json
+{
+  "success": false,
+  "message": "Error, Unauthorized"
 }
 ```
 
@@ -566,6 +585,7 @@
 **Headers**
 
 - `X-Dermalysis-Signature` : `(Secret hash)`
+- `Cookie` : `access_token=theaccesstokenprovidedafteruserloggedin`
 
 **Response:**
 
@@ -629,6 +649,33 @@
       "updatedAt": "2024-06-09T06:25:12.064Z"
     }
   ]
+}
+```
+
+-- `400 Bad Request`
+
+```json
+{
+  "success": false,
+  "message": "User id is required. Please provide a user id in query parameter and make sure you are logged in."
+}
+```
+
+- `403 Forbidden`
+
+```json
+{
+  "success": false,
+  "message": "Error, No token provided"
+}
+```
+
+- `403 Forbidden`
+
+```json
+{
+  "success": false,
+  "message": "Error, Unauthorized"
 }
 ```
 

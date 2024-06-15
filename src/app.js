@@ -12,13 +12,7 @@ const startServer = async () => {
   const app = express();
   console.log("ini");
 
-  try {
-    await loadModel(app);
-  } catch (error) {
-    console.error("Error loading model:", error);
-    // Anda dapat menentukan tindakan apa yang ingin Anda lakukan jika terjadi kesalahan saat memuat model,
-    // seperti menggunakan model cadangan atau memberikan respons yang sesuai kepada pengguna.
-  }
+  await loadModel(app);
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));

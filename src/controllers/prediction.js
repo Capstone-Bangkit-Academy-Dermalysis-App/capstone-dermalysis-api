@@ -51,6 +51,16 @@ const getPredictionsByUser = async (req, res) => {
   }
 };
 
+const getPredictionsByUserNull = async (req, res) => {
+  if (!req.params.userId) {
+    return res.status(400).json({
+      success: false,
+      message:
+        "User id is required. Please provide a user id in query parameter and make sure you are logged in.",
+    });
+  }
+};
+
 const postPredictHandler = async (req, res) => {
   try {
     const image = req.file.buffer;
@@ -123,4 +133,5 @@ const postPredictHandler = async (req, res) => {
 module.exports = {
   getPredictionsByUser,
   postPredictHandler,
+  getPredictionsByUserNull,
 };
