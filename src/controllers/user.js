@@ -1,5 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
-
+const { admin } = require("../config/firebase");
 const prisma = new PrismaClient();
 
 const getUsers = async (req, res) => {
@@ -40,7 +40,35 @@ const storeUser = async (req, res) => {
   }
 };
 
+const updateUserName = async (req, res) => {
+  try {
+    await prisma.user.update({
+      where: {
+        id: req.params.userId,
+      },
+      data: {
+        name: req.body.name,
+      },
+    });
+
+    await admin.auth().updateUser(req.params.userId, {
+      displayName: req.body.name,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Success to update user name.",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: `Error to update user name:${error.message} `,
+    });
+  }
+};
+
 module.exports = {
   getUsers,
   storeUser,
+  updateUserName,
 };

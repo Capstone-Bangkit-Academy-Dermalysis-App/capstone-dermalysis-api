@@ -9,7 +9,7 @@ const {
   getPredictionsByUser,
   getPredictionsByUserNull,
 } = require("../controllers/prediction");
-const { getUsers, storeUser } = require("../controllers/user");
+const { getUsers, storeUser, updateUserName } = require("../controllers/user");
 const { getDiseases } = require("../controllers/disease");
 const { signature } = require("../middleware/signature");
 const verifyToken = require("../middleware");
@@ -26,6 +26,7 @@ router.post("/api/reset-password", firebaseAuthController.resetPassword);
 
 router.get("/api/users", getUsers);
 router.post("/api/users", storeUser);
+router.put("/api/users/:userId/name", verifyToken, updateUserName);
 
 router.post(
   "/api/predict/:userId",

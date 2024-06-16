@@ -323,6 +323,43 @@
 }
 ```
 
+### Update User Display Name
+
+**Endpoint:** `/api/users/:userId/name`
+
+**Method:** `PUT`
+
+**Description:** Change the display name of user.
+
+**Headers**
+
+- `X-Dermalysis-Signature` : `(Secret hash)`
+- `Cookie` : `access_token=theaccesstokenprovidedafteruserloggedin`
+
+**Request Body:**
+
+- `name` as `string`, The new display name
+
+**Response:**
+
+- `200 OK`
+
+```json
+{
+  "success": true,
+  "message": "Success to update user name"
+}
+```
+
+- `500 Internal Server Error`
+
+```json
+{
+  "success": false,
+  "message": "Error to update user name: (error message)"
+}
+```
+
 ### Get all registered user from database
 
 **Endpoint:** `/api/users`
