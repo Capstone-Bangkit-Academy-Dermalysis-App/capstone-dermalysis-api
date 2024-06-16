@@ -15,12 +15,21 @@
 **Headers**
 
 - `X-Dermalysis-Signature` : `(Secret hash)`
+- `Content-Type` : `application/json`
 
 **Request Body:**
 
 - `email` as `string`, must be unique
 - `password` as `string`, must be at least 8 characters
 - `name` as `string`, must be at least 3 characters
+
+```json
+{
+  "email": "youremail@email.com",
+  "password": "password",
+  "name": "Your Name"
+}
+```
 
 **Response:**
 
@@ -120,11 +129,19 @@
 **Headers**
 
 - `X-Dermalysis-Signature` : `(Secret hash)`
+- `Content-Type` : `application/json`
 
 **Request Body:**
 
 - `email` as `string`, must be Registed
 - `password` as `string`, must be Correct
+
+```json
+{
+  "email": "youremail@email.com",
+  "password": "password"
+}
+```
 
 **Response:**
 
@@ -209,7 +226,7 @@
 
 **Request Cookies:**
 
-- `access_token` as `string`, must be Filled
+- `access_token` as `string`, must be set
 
 **Response:**
 
@@ -251,10 +268,17 @@
 **Headers**
 
 - `X-Dermalysis-Signature` : `(Secret hash)`
+- `Content-Type` : `application/json`
 
 **Request Body:**
 
 - `email` as `string`, must be Registed
+
+```json
+{
+  "email": "yourmail@mail.com"
+}
+```
 
 **Response:**
 
@@ -296,12 +320,21 @@
 **Headers**
 
 - `X-Dermalysis-Signature` : `(Secret hash)`
+- `Content-Type` : `application/json`
 
 **Request Body:**
 
 - `id` as `string`, This is userUid in firebase and should be unique
 - `name` as `string`, This is displayName in firebase
 - `email` as `string`, This is identifier aka email in firebase and should be unique
+
+```json
+{
+  "id": "yourUserUid",
+  "name": "Your Name",
+  "email": "youremail@email.com"
+}
+```
 
 **Response:**
 
@@ -334,11 +367,21 @@
 **Headers**
 
 - `X-Dermalysis-Signature` : `(Secret hash)`
-- `Cookie` : `access_token=theaccesstokenprovidedafteruserloggedin`
+- `Content-Type` : `application/json`
+
+**Request Cookies:**
+
+- `access_token` as `string`, must be set
 
 **Request Body:**
 
 - `name` as `string`, The new display name
+
+```json
+{
+  "name": "Your New Name"
+}
+```
 
 **Response:**
 
@@ -414,8 +457,11 @@
 **Headers**
 
 - `X-Dermalysis-Signature` : `(Secret hash)`
-- `Cookie` : `access_token=theaccesstokenprovidedafteruserloggedin`
 - `Content-Type`: `multipart/form-data`
+
+**Request Cookies:**
+
+- `access_token` as `string`, must be set
 
 **Request Body:**
 
@@ -533,7 +579,7 @@
 - `X-Dermalysis-Signature` : `(Secret hash)`
 - `Content-Type`: `multipart/form-data`
 
-**Request Body:**
+**Request Body:**`
 
 - `file` as `file` must be a valid image file, max size 1MB,
 
@@ -622,7 +668,10 @@
 **Headers**
 
 - `X-Dermalysis-Signature` : `(Secret hash)`
-- `Cookie` : `access_token=theaccesstokenprovidedafteruserloggedin`
+
+**Request Cookies:**
+
+- `access_token` as `string`, must be set
 
 **Response:**
 
