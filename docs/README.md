@@ -530,19 +530,6 @@
 }
 ```
 
-- `202 Accepted`
-
-```json
-{
-  "success": true,
-  "message": "Model is predicted successfully, but the confidence score is low",
-  "data": {
-    "label": "No disease detected",
-    "confidenceScore": 56.55708909034729
-  }
-}
-```
-
 - `400 Bad Request`
 
 ```json
@@ -592,6 +579,15 @@
 {
   "success": false,
   "message": "Model is failed to predicted"
+}
+```
+
+- `422 Unprocessable Content`
+
+```json
+{
+  "success": false,
+  "message": "Model is predicted successfully, but the confidence score is low: 57%. Please try again with another image."
 }
 ```
 
@@ -675,19 +671,6 @@
 }
 ```
 
-- `202 Accepted`
-
-```json
-{
-  "success": true,
-  "message": "Model is predicted successfully, but the confidence score is low",
-  "data": {
-    "label": "No disease detected",
-    "confidenceScore": 56.55708909034729
-  }
-}
-```
-
 - `400 Bad Request`
 
 ```json
@@ -703,6 +686,15 @@
 {
   "success": false,
   "message": "Model is failed to predicted"
+}
+```
+
+- `422 Unprocessable Content`
+
+```json
+{
+  "success": false,
+  "message": "Model is predicted successfully, but the confidence score is low: 57%. Please try again with another image."
 }
 ```
 

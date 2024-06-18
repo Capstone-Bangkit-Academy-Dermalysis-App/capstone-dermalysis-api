@@ -95,14 +95,11 @@ const postPredictHandler = async (req, res) => {
     }
 
     if (makePrediction.confidenceScore < 90) {
-      return res.status(200).json({
-        success: true,
-        message:
-          "Model is predicted successfully, but the confidence score is low",
-        data: {
-          label: "No disease detected",
-          confidenceScore: makePrediction.confidenceScore,
-        },
+      return res.status(422).json({
+        success: false,
+        message: `Model is predicted successfully, but the confidence score is low: ${Math.round(
+          makePrediction.confidenceScore
+        )}%. Please try again with another image.`,
       });
     }
     const prediction = await prisma.prediction.create({
