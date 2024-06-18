@@ -530,6 +530,35 @@
 }
 ```
 
+- `202 Accepted`
+
+```json
+{
+  "success": true,
+  "message": "Model is predicted successfully, but the confidence score is low",
+  "data": {
+    "label": "No disease detected",
+    "confidenceScore": 56.55708909034729
+  }
+}
+```
+
+- `400 Bad Request`
+
+```json
+{
+  "success": false,
+  "message": "Please upload a file"
+}
+```
+
+```json
+{
+  "success": false,
+  "message": "Error, No token provided"
+}
+```
+
 - `403 Forbidden`
 
 ```json
@@ -643,6 +672,28 @@
     "createdAt": "2024-06-09T06:46:03.713Z",
     "updatedAt": "2024-06-09T06:46:03.713Z"
   }
+}
+```
+
+- `202 Accepted`
+
+```json
+{
+  "success": true,
+  "message": "Model is predicted successfully, but the confidence score is low",
+  "data": {
+    "label": "No disease detected",
+    "confidenceScore": 56.55708909034729
+  }
+}
+```
+
+- `400 Bad Request`
+
+```json
+{
+  "success": false,
+  "message": "Please upload a file"
 }
 ```
 
