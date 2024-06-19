@@ -347,6 +347,15 @@
 }
 ```
 
+- `409 Conflict`
+
+```json
+{
+  "success": false,
+  "message": "User already exists"
+}
+```
+
 - `500 Internal Server Error`
 
 ```json
