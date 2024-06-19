@@ -41,22 +41,43 @@ class FirebaseAuthController {
           message: "Error updating display name",
         });
       }
+      // Check if the email already exists in the database
+      const existingUser = await prisma.user.findUnique({
+        where: {
+          identifier: user.email,
+        },
+      });
 
-      // Store user in Prisma database
-      try {
-        await prisma.user.create({
+      if (existingUser) {
+        // Email exists, response with credentials
+        const uid = existingUser.id;
+        console.log(`User alrDFeady exists with UID: ${uid}`);
+        return res.status(200).json({
+          success: true,
+          message: "User already exists",
           data: {
-            id: userId,
-            identifier: userCredential.user.email,
-            name: name, // Assuming you want to store the name as well
+            id: uid,
+            name: existingUser.name,
+            email: existingUser.identifier,
           },
         });
-      } catch (prismaError) {
-        console.error("Error storing user in database:", prismaError);
-        return res.status(500).json({
-          success: false,
-          message: "Error storing user in database",
-        });
+      } else {
+        // Store user in Prisma database
+        try {
+          await prisma.user.create({
+            data: {
+              id: userId,
+              identifier: userCredential.user.email,
+              name: name, // Assuming you want to store the name as well
+            },
+          });
+        } catch (prismaError) {
+          console.error("Error storing user in database:", prismaError);
+          return res.status(500).json({
+            success: false,
+            message: "Error storing user in database",
+          });
+        }
       }
 
       // Send email verification

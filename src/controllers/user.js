@@ -21,17 +21,41 @@ const storeUser = async (req, res) => {
   try {
     const user = await req.body;
     console.log(user);
-    await prisma.user.create({
-      data: {
-        id: user.id,
-        name: user.name,
+    // Check if the email already exists in the database
+    const existingUser = await prisma.user.findUnique({
+      where: {
         identifier: user.email,
       },
     });
-    return res.status(200).json({
-      success: true,
-      message: "Success to store user",
-    });
+
+    if (existingUser) {
+      // Email exists, response with credentials
+      const uid = existingUser.id;
+      console.log(`User already exists with UID: ${uid}`);
+      return res.status(200).json({
+        success: true,
+        message: "User already exists",
+        data: {
+          id: uid,
+          name: existingUser.name,
+          email: existingUser.identifier,
+        },
+      });
+    } else {
+      // Email does not exist, include the id field
+      const newUser = await prisma.user.create({
+        data: {
+          id: user.id,
+          name: user.name,
+          identifier: user.email,
+        },
+      });
+      return res.status(200).json({
+        success: true,
+        message: "Success to store user",
+        data: newUser,
+      });
+    }
   } catch (error) {
     return res.status(500).json({
       success: false,
