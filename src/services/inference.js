@@ -15,8 +15,6 @@ const predictClassification = async (model, image) => {
     const prediction = await model.predict(tensor);
     // console.log(prediction);
     const score = await prediction.data();
-    // console.log(score);
-
     const confidenceScore = Math.max(...score) * 100;
     const diseases = await prisma.disease.findMany();
     // const classes = ["cacar-air", "jamur-kuku", "jerawat", "kurap", "kutu-air"];
