@@ -343,7 +343,26 @@
 ```json
 {
   "success": true,
-  "message": "Success to store user"
+  "message": "Success to store user",
+  "data": {
+    "id": "yourUserUid",
+    "name": "Your Name",
+    "email": "youremail@email.com"
+  }
+}
+```
+
+- `200 Success`
+
+```json
+{
+  "success": false,
+  "message": "User already exists",
+  "data": {
+    "id": "yourUserUid",
+    "name": "Your Name",
+    "email": "youremail@email.com"
+  }
 }
 ```
 
@@ -400,45 +419,6 @@
 {
   "success": false,
   "message": "Error to update user name: (error message)"
-}
-```
-
-### Get all registered user from database
-
-**Endpoint:** `/api/users`
-
-**Method:** `GET`
-
-**Description:** Get All users from database (not from firebase).
-
-**Headers**
-
-- `X-Dermalysis-Signature` : `(Secret hash)`
-
-**Response:**
-
-- `200 OK`
-
-```json
-{
-  "success": true,
-  "message": "Fetching all user from database was successfully",
-  "data": [
-    {
-      "id": "z1VAikSrSDSvyZ2xSOlrnxlOqXO2",
-      "identifier": "example@mail.com",
-      "name": "Example name"
-    }
-  ]
-}
-```
-
-- `500 Internal Server Error`
-
-```json
-{
-  "success": false,
-  "message": "Error fetching users: (error message)"
 }
 ```
 

@@ -26,17 +26,12 @@ router.post("/api/reset-password", firebaseAuthController.resetPassword);
 
 router.get("/api/users", getUsers);
 router.post("/api/users", storeUser);
-router.put("/api/users/:userId/name", verifyToken, updateUserName);
+router.put("/api/users/:userId/name", updateUserName);
 
-router.post(
-  "/api/predict/:userId",
-  verifyToken,
-  uploadMiddleware,
-  postPredictHandler
-);
+router.post("/api/predict/:userId", uploadMiddleware, postPredictHandler);
 router.post("/api/predict", uploadMiddleware, postPredictHandler);
-router.get("/api/predictions/:userId", verifyToken, getPredictionsByUser);
-router.get("/api/predictions", verifyToken, getPredictionsByUserNull);
+router.get("/api/predictions/:userId", getPredictionsByUser);
+router.get("/api/predictions", getPredictionsByUserNull);
 
 router.get("/api/diseases", getDiseases);
 module.exports = router;
