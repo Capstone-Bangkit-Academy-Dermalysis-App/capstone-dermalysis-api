@@ -32,7 +32,7 @@ const storeUser = async (req, res) => {
       // Email exists, response with credentials
       const uid = existingUser.id;
       console.log(`User already exists with UID: ${uid}`);
-      return res.status(409).json({
+      return res.status(200).json({
         success: true,
         message: "User already exists",
         data: {
