@@ -343,7 +343,12 @@
 ```json
 {
   "success": true,
-  "message": "Success to store user"
+  "message": "Success to store user",
+  "data": {
+    "id": "yourUserUid",
+    "name": "Your Name",
+    "email": "youremail@email.com"
+  }
 }
 ```
 
@@ -352,7 +357,12 @@
 ```json
 {
   "success": false,
-  "message": "User already exists"
+  "message": "User already exists",
+  "data": {
+    "id": "yourUserUid",
+    "name": "Your Name",
+    "email": "youremail@email.com"
+  }
 }
 ```
 

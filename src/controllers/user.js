@@ -53,7 +53,11 @@ const storeUser = async (req, res) => {
       return res.status(200).json({
         success: true,
         message: "Success to store user",
-        data: newUser,
+        data: {
+          id: newUser.id,
+          name: newUser.name,
+          email: newUser.identifier,
+        },
       });
     }
   } catch (error) {
