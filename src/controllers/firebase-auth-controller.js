@@ -44,14 +44,14 @@ class FirebaseAuthController {
       // Check if the email already exists in the database
       const existingUser = await prisma.user.findUnique({
         where: {
-          identifier: user.email,
+          identifier: email,
         },
       });
 
       if (existingUser) {
         // Email exists, response with credentials
         const uid = existingUser.id;
-        console.log(`User alrDFeady exists with UID: ${uid}`);
+        console.log(`User already exists with UID: ${uid}`);
         return res.status(200).json({
           success: true,
           message: "User already exists",
